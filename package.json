@@ -2,7 +2,7 @@
   "name": "version-secure",
   "displayName": "Version Secure",
   "description": "Monitorea y verifica coherencia de versiones entre archivos de proyecto",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "icon": "icon.png",
   "publisher": "jalkhov",
   "private": true,
@@ -50,12 +50,9 @@
       "title": "Version Checker",
       "properties": {
         "versionChecker.enabled": {
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "default": null,
-          "description": "Habilitar/deshabilitar para este workspace (null = auto, true/false = forzado)"
+          "type": "boolean",
+          "default": true,
+          "description": "Habilitar/deshabilitar Version Checker para este workspace"
         },
         "versionChecker.files": {
           "type": "object",
@@ -64,15 +61,18 @@
         },
         "versionChecker.checkOnSave": {
           "type": "boolean",
-          "default": true
+          "default": true,
+          "description": "Verificar al guardar archivos"
         },
         "versionChecker.checkInterval": {
           "type": "number",
-          "default": 0
+          "default": 0,
+          "description": "Intervalo de verificación en ms (0 = desactivado)"
         },
         "versionChecker.statusBarPriority": {
           "type": "number",
-          "default": 1000
+          "default": 1000,
+          "description": "Prioridad en status bar"
         }
       }
     }

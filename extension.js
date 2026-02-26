@@ -7,25 +7,21 @@ let outputChannel;
 let config = {};
 let isActive = false;
 
-const LOG_PREFIX = "[Version Checker]";
-
 function log(level, message) {
-  const timestamp = new Date().toISOString().split("T")[1].split(".")[0];
-  const line = `${timestamp} ${level} ${message}`;
-  outputChannel?.appendLine(line);
-  if (level === "ERR") console.error(`${LOG_PREFIX} ${message}`);
+  const time = new Date().toISOString().split("T")[1].split(".")[0];
+  outputChannel?.appendLine(`${time} ${level} ${message}`);
 }
 
 function activate(context) {
   outputChannel = vscode.window.createOutputChannel("Version Checker");
 
-  // Verificar si está habilitado para este workspace
+  // Verificar si está habilitado
   const enabled = vscode.workspace
     .getConfiguration("versionChecker")
-    .get("enabled", null);
+    .get("enabled", true);
 
-  if (enabled === false) {
-    log("INF", "Deshabilitado para este workspace");
+  if (!enabled) {
+    log("INF", "Deshabilitado por configuración");
     return;
   }
 
@@ -46,15 +42,18 @@ function activate(context) {
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration((e) => {
       if (!e.affectsConfiguration("versionChecker")) return;
+
       const newEnabled = vscode.workspace
         .getConfiguration("versionChecker")
-        .get("enabled", null);
-      if (newEnabled === false) {
+        .get("enabled", true);
+
+      if (!newEnabled) {
         isActive = false;
-        statusBarItem?.hide();
-        log("INF", "Deshabilitado por cambio de configuración");
+        statusBarItem.hide();
+        log("INF", "Deshabilitado");
         return;
       }
+
       isActive = true;
       loadConfig();
       updateStatus();
@@ -146,7 +145,8 @@ function updateStatus() {
 
   if (!config._configured) {
     statusBarItem.text = "$(gear) Version Checker";
-    statusBarItem.tooltip = "Click para configurar";
+    statusBarItem.tooltip =
+      "Click para configurar (añade versionChecker.files en settings)";
     statusBarItem.backgroundColor = new vscode.ThemeColor(
       "statusBarItem.warningBackground",
     );
@@ -156,7 +156,7 @@ function updateStatus() {
 
   if (config._fileCount < 2) {
     statusBarItem.text = "$(warning) Mínimo 2 archivos";
-    statusBarItem.tooltip = `Configurados: ${config._fileCount}`;
+    statusBarItem.tooltip = `Configurados: ${config._fileCount} (se necesitan 2)`;
     statusBarItem.backgroundColor = new vscode.ThemeColor(
       "statusBarItem.warningBackground",
     );
@@ -165,10 +165,7 @@ function updateStatus() {
   }
 
   const versions = getVersions();
-  if (!versions) {
-    statusBarItem.hide();
-    return;
-  }
+  if (!versions) return;
 
   const entries = Object.entries(versions);
   const found = entries.filter(([, d]) => d.found && d.version);
@@ -178,12 +175,11 @@ function updateStatus() {
 
   if (foundVersions.length === 0) {
     statusBarItem.text = "$(error) Sin versiones";
-    statusBarItem.tooltip = "Ningún archivo parseado correctamente";
+    statusBarItem.tooltip = "Ningún archivo parseado";
     statusBarItem.backgroundColor = new vscode.ThemeColor(
       "statusBarItem.errorBackground",
     );
     statusBarItem.show();
-    log("WRN", "Ninguna versión detectada");
     return;
   }
 
@@ -258,9 +254,10 @@ async function showDetails() {
 
 async function toggleExtension() {
   const config = vscode.workspace.getConfiguration("versionChecker");
-  const current = config.get("enabled", null);
-  const newValue = current === false ? true : false;
+  const current = config.get("enabled", true);
+  const newValue = !current;
 
+  // Usar ConfigurationTarget.Workspace para guardar en .vscode/settings.json
   await config.update(
     "enabled",
     newValue,
@@ -268,10 +265,15 @@ async function toggleExtension() {
   );
 
   vscode.window.showInformationMessage(
-    `Version Checker ${newValue ? "activado" : "desactivado"} para este workspace`,
+    `Version Checker ${newValue ? "activado" : "desactivado"}`,
   );
 
   log("INF", `${newValue ? "Activado" : "Desactivado"} manualmente`);
+
+  // Recargar ventana para aplicar cambio
+  if (newValue) {
+    vscode.commands.executeCommand("workbench.action.reloadWindow");
+  }
 }
 
 function deactivate() {
