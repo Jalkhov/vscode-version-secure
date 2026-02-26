@@ -3,6 +3,7 @@
   "displayName": "Version Secure",
   "description": "Monitorea y verifica coherencia de versiones entre archivos de proyecto",
   "version": "1.0.1",
+  "icon": "icon.png",
   "publisher": "jalkhov",
   "private": true,
   "license": "MIT",
