@@ -26,7 +26,7 @@ Agregar en el `settings.json` del workspace:
     }
   }
 }
-````
+```
 
 ### Ejemplo real
 
