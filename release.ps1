@@ -1,8 +1,5 @@
-#!/bin/bash
-# release.sh
-
 if [ -z "$1" ]; then
-    echo "Uso: ./release.sh 1.0.1"
+    echo "Uso: ./release.ps1 1.0.1"
     exit 1
 fi
 
