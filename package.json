@@ -1,0 +1,97 @@
+{
+  "name": "version-secure",
+  "displayName": "Version Secure",
+  "description": "Monitorea y verifica coherencia de versiones entre archivos de proyecto",
+  "version": "1.0.0",
+  "publisher": "jalkhov",
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jalkhov/vscode-version-secure.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jalkhov/vscode-version-secure/issues"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "version",
+    "versioning",
+    "sync",
+    "check",
+    "semver"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "versionChecker.check",
+        "title": "Check Versions Now",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "versionChecker.showDetails",
+        "title": "Show Version Details"
+      }
+    ],
+    "configuration": {
+      "title": "Version Checker",
+      "properties": {
+        "versionChecker.files": {
+          "type": "object",
+          "default": {
+            "config.py": {
+              "patterns": [
+                "APP_VERSION\\s*=\\s*[\"']([^\"']+)[\"']"
+              ]
+            },
+            "installer.nsi": {
+              "patterns": [
+                "!define\\s+APP_VERSION\\s*[\"']?([^\"']+)[\"']?",
+                "!define\\s+VERSION\\s*[\"']?([^\"']+)[\"']?",
+                "VIProductVersion\\s*[\"']?([\\d.]+)[\"']?"
+              ]
+            },
+            "pyproject.toml": {
+              "patterns": [
+                "^version\\s*=\\s*[\"']([^\"']+)[\"']"
+              ]
+            }
+          },
+          "description": "Archivos a monitorear y sus patrones regex para extraer versión"
+        },
+        "versionChecker.checkOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Verificar automáticamente al guardar archivos"
+        },
+        "versionChecker.checkInterval": {
+          "type": "number",
+          "default": 10000,
+          "description": "Intervalo de verificación automática en ms (0 para desactivar)"
+        },
+        "versionChecker.statusBarPriority": {
+          "type": "number",
+          "default": 1000,
+          "description": "Prioridad del item en la status bar"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0"
+  }
+}
