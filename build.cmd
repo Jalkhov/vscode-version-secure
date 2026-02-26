@@ -20,20 +20,20 @@ for /f "tokens=*" %%a in ('node -p "require('./package.json').version"') do set 
 echo 📋 Versión: %VERSION%
 
 :: Generar
-call vsce package --out "version-checker-%VERSION%.vsix"
+call vsce package --out "version-secure-%VERSION%.vsix"
 
-if not exist "version-checker-%VERSION%.vsix" (
+if not exist "version-secure-%VERSION%.vsix" (
     echo ❌ Error al generar
     exit /b 1
 )
 
-echo ✅ Generado: version-checker-%VERSION%.vsix
+echo ✅ Generado: version-secure-%VERSION%.vsix
 
 :: Preguntar si instalar
 set /p INSTALL=¿Instalar ahora? (s/n):
 if /i "%INSTALL%"=="s" (
     echo 📥 Instalando...
-    call code --install-extension "version-checker-%VERSION%.vsix" --force
+    call code --install-extension "version-secure-%VERSION%.vsix" --force
     echo ✅ Instalado
 )
 

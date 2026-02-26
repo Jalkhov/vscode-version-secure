@@ -146,7 +146,7 @@ function extractVersion(content, patterns) {
     const pattern = patterns[i];
     try {
       log(`  📐 Probando patrón ${i + 1}: ${pattern.substring(0, 50)}...`);
-      const regex = new RegExp(pattern, "i");
+      const regex = new RegExp(pattern, "im");
       const match = content.match(regex);
       if (match && match[1]) {
         const version = match[1].trim();

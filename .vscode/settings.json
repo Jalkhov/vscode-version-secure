@@ -13,7 +13,7 @@
         },
         "test_files/test.toml": {
             "patterns": [
-                "^version\\s*=\\s*[\"']([^\"']+)[\"']"
+                "version\\s*=\\s*[\"']([^\"']+)[\"']"
             ]
         }
     }
