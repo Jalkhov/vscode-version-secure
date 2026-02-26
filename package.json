@@ -2,7 +2,7 @@
   "name": "version-secure",
   "displayName": "Version Secure",
   "description": "Monitorea y verifica coherencia de versiones entre archivos de proyecto",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "jalkhov",
   "private": true,
   "license": "MIT",
@@ -48,26 +48,8 @@
       "properties": {
         "versionChecker.files": {
           "type": "object",
-          "default": {
-            "config.py": {
-              "patterns": [
-                "APP_VERSION\\s*=\\s*[\"']([^\"']+)[\"']"
-              ]
-            },
-            "installer.nsi": {
-              "patterns": [
-                "!define\\s+APP_VERSION\\s*[\"']?([^\"']+)[\"']?",
-                "!define\\s+VERSION\\s*[\"']?([^\"']+)[\"']?",
-                "VIProductVersion\\s*[\"']?([\\d.]+)[\"']?"
-              ]
-            },
-            "pyproject.toml": {
-              "patterns": [
-                "^version\\s*=\\s*[\"']([^\"']+)[\"']"
-              ]
-            }
-          },
-          "description": "Archivos a monitorear y sus patrones regex para extraer versión"
+          "default": {},
+          "description": "Archivos a monitorear. Ejemplo: {\"config.py\": {\"patterns\": [\"APP_VERSION\\\\s*=\\\\s*[\\\"']([^\\\"']+)[\\\"']\"]}}"
         },
         "versionChecker.checkOnSave": {
           "type": "boolean",
@@ -76,7 +58,7 @@
         },
         "versionChecker.checkInterval": {
           "type": "number",
-          "default": 10000,
+          "default": 0,
           "description": "Intervalo de verificación automática en ms (0 para desactivar)"
         },
         "versionChecker.statusBarPriority": {

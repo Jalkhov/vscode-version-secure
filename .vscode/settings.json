@@ -1,0 +1,20 @@
+{
+    "versionChecker.files": {
+        "test_files/test.py": {
+            "patterns": [
+                "APP_VERSION\\s*=\\s*[\"']([^\"']+)[\"']"
+            ]
+        },
+        "test_files/test.nsi": {
+            "patterns": [
+                "!define\\s+APP_VERSION\\s*[\"']?([^\"']+)[\"']?",
+                "!define\\s+VERSION\\s*[\"']?([^\"']+)[\"']?"
+            ]
+        },
+        "test_files/test.toml": {
+            "patterns": [
+                "^version\\s*=\\s*[\"']([^\"']+)[\"']"
+            ]
+        }
+    }
+}
